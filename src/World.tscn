@@ -1,0 +1,112 @@
+[gd_scene load_steps=19 format=3 uid="uid://dv2k38dqx3t5g"]
+
+[ext_resource type="PackedScene" uid="uid://b4t3ssnubyjmd" path="res://src/player.tscn" id="1_x6in4"]
+[ext_resource type="PackedScene" uid="uid://cxviwwmanbidg" path="res://scenes/torch.tscn" id="2_ibwsd"]
+[ext_resource type="Texture2D" uid="uid://be54jddyjum18" path="res://Assets/japanese_stone_wall_1k/textures/japanese_stone_wall_diff_1k.png" id="3_nsey0"]
+[ext_resource type="Texture2D" uid="uid://c8hpn318iuvs8" path="res://Assets/coast_sand_rocks_02_1k/textures/coast_sand_rocks_02_diff_1k.png" id="3_uhqgj"]
+[ext_resource type="Texture2D" uid="uid://dm11kit0oqbdn" path="res://Assets/japanese_stone_wall_1k/textures/japanese_stone_wall_nor_gl_1k.png" id="4_30031"]
+[ext_resource type="Texture2D" uid="uid://djvindy4bowsy" path="res://Assets/coast_sand_rocks_02_1k/textures/coast_sand_rocks_02_nor_gl_1k.png" id="4_u4t5t"]
+[ext_resource type="Texture2D" uid="uid://ctg1rxymkcb05" path="res://Assets/japanese_stone_wall_1k/textures/japanese_stone_wall_rough_1k.png" id="5_r7ysc"]
+[ext_resource type="Texture2D" uid="uid://dy7s0yvn8d6j3" path="res://Assets/coast_sand_rocks_02_1k/textures/coast_sand_rocks_02_rough_1k.png" id="5_td3vy"]
+[ext_resource type="PackedScene" uid="uid://yv2eji1dvdyq" path="res://scenes/rounded_table_b.tscn" id="10_hwlh4"]
+[ext_resource type="PackedScene" uid="uid://dygh0cuiexvmq" path="res://scenes/torch_place_holder.tscn" id="10_r5vwc"]
+[ext_resource type="Script" path="res://scenes/torch_place_holder.gd" id="11_3swdm"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_skr54"]
+albedo_texture = ExtResource("3_uhqgj")
+roughness_texture = ExtResource("5_td3vy")
+normal_enabled = true
+normal_texture = ExtResource("4_u4t5t")
+uv1_scale = Vector3(60, 60, 60)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vdg1y"]
+material = SubResource("StandardMaterial3D_skr54")
+size = Vector3(0.5, 10, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_h8v3w"]
+size = Vector3(0.5, 5, 10)
+
+[sub_resource type="Environment" id="Environment_80780"]
+fog_light_color = Color(0.976471, 0.976471, 0.980392, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ry78q"]
+albedo_texture = ExtResource("3_nsey0")
+roughness_texture = ExtResource("5_r7ysc")
+normal_enabled = true
+normal_texture = ExtResource("4_30031")
+uv1_scale = Vector3(10, 5, 10)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rb1ye"]
+material = SubResource("StandardMaterial3D_ry78q")
+size = Vector3(0.5, 5, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qk50o"]
+size = Vector3(0.5, 5, 10)
+
+[node name="World" type="Node3D"]
+
+[node name="Player" parent="." groups=["player"] instance=ExtResource("1_x6in4")]
+transform = Transform3D(0.999918, 0, 0.0128103, 0, 1, 0, -0.0128103, 0, 0.999918, 3.37273, 0.287315, 0)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Neck" type="Node3D" parent="Player"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 1.85129, 0.0495697)
+
+[node name="Camera3D" type="Camera3D" parent="Player/Neck"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0745575)
+fov = 99.1
+
+[node name="torch" parent="Player/Neck/Camera3D" instance=ExtResource("2_ibwsd")]
+transform = Transform3D(0.222502, 0, -1.16992, 0, 1, 0, 0.974932, 0, 0.267002, 0.121034, -0.229171, -0.211156)
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Player/Neck/Camera3D/torch"]
+transform = Transform3D(0.111313, 0, 0.993785, 0, 1, 0, -0.828154, 0, 0.0927607, 0, 0, 0)
+light_color = Color(0.945098, 1, 0.733333, 1)
+light_energy = 7.0
+light_volumetric_fog_energy = 5.0
+spot_range = 4.39139
+spot_angle = 31.897
+
+[node name="Interaction" type="RayCast3D" parent="Player/Neck/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.118398, 0.124127)
+target_position = Vector3(0, 0, -2)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.184831, 0.980828, -0.0617564, -0.813263, 0.187929, 0.550714, 0.551761, -0.0515648, 0.832407, -0.495442, 5, 3.65827)
+shadow_enabled = true
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -20, 0, 1, -8.74228e-07, 0, 0, 0, 10, 5.96632, -0.074815, 0)
+mesh = SubResource("BoxMesh_vdg1y")
+skeleton = NodePath("StaticBody3D2")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.79361, -1.36331, 0)
+collision_mask = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/StaticBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8485, 2, 0)
+shape = SubResource("BoxShape3D_h8v3w")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_80780")
+
+[node name="Wall" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.41733, 2.68717, 0)
+mesh = SubResource("BoxMesh_rb1ye")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Wall"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall/StaticBody3D"]
+shape = SubResource("BoxShape3D_qk50o")
+
+[node name="Rounded Table B" parent="." instance=ExtResource("10_hwlh4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.53437, 0, 0)
+
+[node name="torch" parent="." instance=ExtResource("10_r5vwc")]
+transform = Transform3D(1.42076, 0, 9.89856, 0, 10, 0, -9.89856, 0, 1.42076, -1.94855, 1.57111, 0.16241)
+script = ExtResource("11_3swdm")
+
+[editable path="Rounded Table B"]
+[editable path="torch"]

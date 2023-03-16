@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://b4t3ssnubyjmd"]
+
+[ext_resource type="Script" path="res://src/CharacterBody3D.gd" id="1_q1n4y"]
+[ext_resource type="PackedScene" uid="uid://b8q8w0kgq0vhd" path="res://scenes/warrior_idle.tscn" id="2_fbhcj"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_poiv5"]
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_q1n4y")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_poiv5")
+
+[node name="Warrior Idle" parent="." instance=ExtResource("2_fbhcj")]
+
+[editable path="Warrior Idle"]
